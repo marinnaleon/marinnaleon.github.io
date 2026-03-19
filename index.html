@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marina Leon — Finance & Performance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --sub: #333333;
+      --muted: #666666;
+      --border: #e0e0e0;
+      --accent: #c8a96e;
+      --sidebar-bg: #f7f7f7;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .lang-toggle button {
+      background: #fff;
+      border: none;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-toggle button.active {
+      background: var(--text);
+      color: #fff;
+    }
+
+    /* LAYOUT */
+    .page {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* SIDEBAR */
+    aside {
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      padding: 52px 28px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .name-block .first {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+      line-height: 1.2;
+    }
+    .name-block .role {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 8px;
+      display: block;
+      line-height: 1.5;
+    }
+
+    .sidebar-block { display: flex; flex-direction: column; gap: 6px; }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .sidebar-block a, .sidebar-block span {
+      font-size: 12.5px;
+      color: var(--sub);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .sidebar-block a:hover { color: var(--text); text-decoration: underline; }
+
+    .lang-row { display: flex; flex-direction: column; gap: 4px; }
+    .lang-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--sub);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .lang-item:last-child { border-bottom: none; }
+    .lang-level {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* MAIN */
+    main {
+      padding: 52px 52px 80px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* SECTION */
+    .section { padding-bottom: 40px; margin-bottom: 40px; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; margin-bottom: 0; }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    /* SUMMARY */
+    .summary-text {
+      font-size: 14px;
+      color: var(--sub);
+      line-height: 1.8;
+      max-width: 640px;
+    }
+
+    /* EXPERIENCE */
+    .exp-item {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-item:first-child { padding-top: 0; }
+    .exp-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+    .exp-role {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .exp-date {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .exp-company {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .exp-bullets { list-style: none; }
+    .exp-bullets li {
+      font-size: 13px;
+      color: var(--sub);
+      padding: 3px 0 3px 16px;
+      position: relative;
+      line-height: 1.65;
+    }
+    .exp-bullets li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* CORE SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .skill-item {
+      font-size: 13px;
+      color: var(--sub);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .skill-item::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .skill-item:nth-last-child(-n+2) { border-bottom: none; }
+
+    /* TECH STACK */
+    .tech-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tech-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      color: var(--sub);
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .tech-tag:hover { border-color: var(--accent); color: var(--text); background: #fff; }
+    .tech-tag img { width: 18px; height: 18px; object-fit: contain; }
+
+    /* EDUCATION */
+    .edu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 24px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .edu-item:first-child { padding-top: 0; }
+    .edu-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .edu-degree { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .edu-school { font-size: 12px; color: var(--muted); }
+    .edu-date { font-size: 12px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+
+    /* CERTS */
+    .cert-list { display: flex; flex-direction: column; gap: 8px; }
+    .cert-item {
+      font-size: 13px;
+      color: var(--sub);
+      padding: 8px 12px;
+      background: #fafafa;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 2px;
+    }
+
+    /* LANG VISIBILITY */
+    [data-lang] { display: none; }
+    body.lang-en [data-lang="en"] { display: block; }
+    body.lang-pt [data-lang="pt"] { display: block; }
+    body.lang-en [data-lang="en"].grid { display: grid; }
+    body.lang-pt [data-lang="pt"].grid { display: grid; }
+    body.lang-en [data-lang="en"].flex { display: flex; }
+    body.lang-pt [data-lang="pt"].flex { display: flex; }
+
+    @media (max-width: 720px) {
+      .page { grid-template-columns: 1fr; }
+
+      aside {
+        position: relative;
+        height: auto;
+        padding: 56px 24px 28px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        gap: 20px;
+      }
+
+      /* Stack contact/linkedin/languages horizontally in a wrap */
+      .aside-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px 40px;
+      }
+      .aside-meta .sidebar-block { min-width: 140px; }
+
+      .name-block .first { font-size: 22px; }
+
+      main { padding: 32px 24px 60px; }
+
+      .skills-grid { grid-template-columns: 1fr; }
+      .skill-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+      .skill-item:last-child { border-bottom: none; }
+
+      .exp-header { flex-direction: column; gap: 2px; }
+      .exp-date { font-size: 12px; color: var(--muted); }
+
+      .edu-item { flex-direction: column; gap: 4px; }
+      .edu-date { font-size: 12px; }
+
+      .tech-grid { gap: 8px; }
+      .tech-tag { padding: 7px 12px; font-size: 12px; }
+
+      .lang-toggle { top: 12px; right: 16px; }
+    }
+
+    @media (min-width: 721px) {
+      .aside-meta { display: contents; }
+    }
+  </style>
+</head>
+<body class="lang-en">
+
+  <div class="lang-toggle">
+    <button class="active" onclick="setLang('en')">EN</button>
+    <button onclick="setLang('pt')">PT</button>
+  </div>
+
+  <div class="page">
+
+    <aside>
+      <div class="name-block">
+        <span class="first">Marina Leon</span>
+        <span class="role" data-lang="en">Planning & Performance Specialist</span>
+        <span class="role" data-lang="pt">Especialista de Planejamento & Performance</span>
+      </div>
+
+      <div class="aside-meta">
+        <div class="sidebar-block">
+          <p class="sidebar-label" data-lang="en">Contact</p>
+          <p class="sidebar-label" data-lang="pt">Contato</p>
+          <a href="mailto:marimonique2001&#64;gmail.com">marimonique2001&#64;gmail.com</a>
+          <span>Campinas, SP — Brazil</span>
+        </div>
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">LinkedIn</p>
+          <a href="https://linkedin.com/in/marinamleon" target="_blank">linkedin.com/in/marinamleon</a>
+        </div>
+
+        <div class="sidebar-block">
+          <p class="sidebar-label" data-lang="en">Languages</p>
+          <p class="sidebar-label" data-lang="pt">Idiomas</p>
+          <div class="lang-row">
+            <div class="lang-item"><span>Português</span><span class="lang-level">C2</span></div>
+            <div class="lang-item"><span>English</span><span class="lang-level">C1</span></div>
+            <div class="lang-item"><span>Español</span><span class="lang-level">B1</span></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+
+      <!-- SUMMARY -->
+      <div class="section">
+        <p class="section-title" data-en="Profile" data-pt="Perfil"></p>
+        <p class="summary-text" data-lang="en">Finance professional with a background in Business Administration and postgraduate studies in Engineering Economics and Corporate Finance. Experience across global companies including IBM, Amazon, Deloitte, and AB InBev — with strong expertise in financial analysis, performance management, and business intelligence.</p>
+        <p class="summary-text" data-lang="pt">Profissional de Finanças com formação em Administração e pós-graduação em Engenharia Econômica e Finanças Corporativas. Experiência em empresas globais como IBM, Amazon, Deloitte e AB InBev — com forte expertise em análise financeira, gestão de performance e business intelligence.</p>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section">
+        <p class="section-title" data-en="Experience" data-pt="Experiência Profissional"></p>
+
+        <div class="exp-item">
+          <div class="exp-header">
+            <span class="exp-role" data-lang="en">Planning and Performance Specialist</span>
+            <span class="exp-role" data-lang="pt">Especialista de Planejamento e Performance</span>
+            <span class="exp-date">Jul 2025 — <span data-lang="en">Present</span><span data-lang="pt">Presente</span></span>
+          </div>
+          <div class="exp-company">AB InBev — Ambev Global Tech</div>
+          <ul class="exp-bullets" data-lang="en">
+            <li>Managed an annual budget of ~USD 35M, leading financial planning, forecasting, cost control, and performance analysis across multiple cost centers</li>
+            <li>Designed automation initiatives reducing monthly processing time by 60% and SAP transaction volumes by 54%</li>
+            <li>Led end-to-end financial operations for global programs with 30+ international vendors via Procure-to-Pay governance</li>
+            <li>Executed complex global intercompany and cross-charge transactions across the US, Europe, and Asia</li>
+            <li>Leveraged SAP and Anaplan for cost center monitoring, variance analysis, and financial forecasting</li>
+            <li>Developed automated reporting solutions using Power BI, Python, and Excel for global stakeholders</li>
+          </ul>
+          <ul class="exp-bullets" data-lang="pt">
+            <li>Gestão de budget anual de ~USD 35M, liderando planejamento financeiro, forecast, controle de custos e análise de performance em múltiplos centros de custo</li>
+            <li>Automações que reduziram o tempo de processamento mensal em 60% e o volume de lançamentos no SAP em 54%</li>
+            <li>Liderança das operações financeiras ponta a ponta com mais de 30 fornecedores internacionais via Procure-to-Pay</li>
+            <li>Execução de transações intercompany e cross-charge globais nos EUA, Europa e Ásia</li>
+            <li>Utilização de SAP e Anaplan para monitoramento de centros de custo, análise de variações e forecast</li>
+            <li>Automação de análises e relatórios financeiros com Power BI, Python e Excel para stakeholders globais</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-header">
+            <span class="exp-role" data-lang="en">Accounting Analyst Intern</span>
+            <span class="exp-role" data-lang="pt">Estágio em Contabilidade</span>
+            <span class="exp-date">Apr 2024 — Set 2024</span>
+          </div>
+          <div class="exp-company">Amazon Brazil</div>
+          <ul class="exp-bullets" data-lang="en">
+            <li>Led UAT for critical accounting systems ensuring compliance with IFRS and US GAAP standards</li>
+            <li>Developed dashboards using Power BI and Amazon QuickSight for strategic decision-making</li>
+            <li>Extracted and validated data from the General Ledger to guarantee financial reporting accuracy</li>
+          </ul>
+          <ul class="exp-bullets" data-lang="pt">
+            <li>Liderança de UAT para sistemas contábeis críticos, assegurando conformidade com IFRS e US GAAP</li>
+            <li>Desenvolvimento de dashboards com Power BI e Amazon QuickSight para suporte à decisão estratégica</li>
+            <li>Extração e validação de dados do Razão Contábil para garantir precisão dos relatórios financeiros</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-header">
+            <span class="exp-role" data-lang="en">Financial Analyst Intern</span>
+            <span class="exp-role" data-lang="pt">Estágio em Finanças</span>
+            <span class="exp-date">Apr 2022 — Apr 2024</span>
+          </div>
+          <div class="exp-company">IBM Brasil</div>
+          <ul class="exp-bullets" data-lang="en">
+            <li>Managed a USD 10M annual headcount budget driving cost efficiency and strategic workforce planning</li>
+            <li>Automated financial processes with Excel VBA and SQL, reducing manual workload by 65%</li>
+            <li>Partnered with Finance teams across Canada and LATAM for forecasting cycles and KPI monitoring</li>
+            <li>Built data-driven dashboards and financial models supporting executive decision-making</li>
+          </ul>
+          <ul class="exp-bullets" data-lang="pt">
+            <li>Gestão de budget anual de USD 10M em headcount, promovendo eficiência de custos e planejamento estratégico</li>
+            <li>Automação de processos financeiros com Excel VBA e SQL, reduzindo esforço manual em 65%</li>
+            <li>Parceria com times de Finanças no Canadá e LATAM para ciclos de forecast e monitoramento de KPIs</li>
+            <li>Desenvolvimento de dashboards e modelos financeiros para suporte à tomada de decisão executiva</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- CORE SKILLS -->
+      <div class="section">
+        <p class="section-title" data-en="Core Skills" data-pt="Competências"></p>
+        <div class="skills-grid" data-lang="en">
+          <div class="skill-item">Financial Analysis & Controllership</div>
+          <div class="skill-item">Budget & Forecasting</div>
+          <div class="skill-item">Process & Report Automation</div>
+          <div class="skill-item">Variance Analysis</div>
+          <div class="skill-item">KPI Structuring</div>
+          <div class="skill-item">Procure-to-Pay Governance</div>
+          <div class="skill-item">Compliance — US GAAP & SOX</div>
+          <div class="skill-item">Agile — Scrum & Kanban</div>
+        </div>
+        <div class="skills-grid" data-lang="pt">
+          <div class="skill-item">Análise Financeira & Controladoria</div>
+          <div class="skill-item">Budget & Forecast</div>
+          <div class="skill-item">Automação de Processos e Relatórios</div>
+          <div class="skill-item">Análise de Variações</div>
+          <div class="skill-item">Estruturação de KPIs</div>
+          <div class="skill-item">Governança Procure-to-Pay</div>
+          <div class="skill-item">Compliance — US GAAP & SOX</div>
+          <div class="skill-item">Agile — Scrum & Kanban</div>
+        </div>
+      </div>
+
+      <!-- TECH STACK -->
+      <div class="section">
+        <p class="section-title" data-en="Tech Stack" data-pt="Ferramentas"></p>
+        <div class="tech-grid">
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/powerbi/F2C811" alt="Power BI"/>Power BI</div>
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/microsoftexcel/217346" alt="Excel"/>Excel / VBA</div>
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="SQL"/>SQL</div>
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/python/3776AB" alt="Python"/>Python</div>
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/sap/0FAAFF" alt="SAP"/>SAP</div>
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/amazonaws/FF9900" alt="QuickSight"/>Amazon QuickSight</div>
+          <div class="tech-tag"><img src="https://cdn.simpleicons.org/ibm/052FAD" alt="IBM Cognos"/>IBM Cognos</div>
+          <div class="tech-tag">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="3" fill="#005CB9"/><text x="12" y="16" text-anchor="middle" font-size="10" fill="white" font-family="Arial" font-weight="bold">AP</text></svg>
+            Anaplan
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="section">
+        <p class="section-title" data-en="Education" data-pt="Formação"></p>
+        <div class="edu-item">
+          <div>
+            <div class="edu-degree" data-lang="en">Postgraduate — Engineering Economics & Corporate Finance</div>
+            <div class="edu-degree" data-lang="pt">Pós-Graduação — Engenharia Econômica e Finanças Corporativas</div>
+            <div class="edu-school">Universidade Cruzeiro do Sul</div>
+          </div>
+          <div class="edu-date">2025 — 2026</div>
+        </div>
+        <div class="edu-item">
+          <div>
+            <div class="edu-degree" data-lang="en">Bachelor of Business Administration</div>
+            <div class="edu-degree" data-lang="pt">Bacharelado em Administração</div>
+            <div class="edu-school">FAMEESP — Faculdade Metropolitana do Estado de São Paulo</div>
+          </div>
+          <div class="edu-date">2021 — 2025</div>
+        </div>
+      </div>
+
+      <!-- CERTIFICATIONS -->
+      <div class="section">
+        <p class="section-title" data-en="Certifications" data-pt="Certificações"></p>
+        <div class="cert-list">
+          <div class="cert-item">Atlassian Agile Project Management</div>
+          <div class="cert-item">Microsoft Career Essentials in Data Analysis</div>
+          <div class="cert-item">IBM Cognos Analytics</div>
+          <div class="cert-item">IBM Data Science Foundations</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.body.className = 'lang-' + lang;
+      document.querySelectorAll('.lang-toggle button').forEach((btn, i) => {
+        btn.classList.toggle('active', (i === 0 && lang === 'en') || (i === 1 && lang === 'pt'));
+      });
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + lang);
+      });
+    }
+    setLang('en');
+  </script>
+</body>
+</html>
